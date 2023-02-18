@@ -4,11 +4,13 @@
 #include <stdint.h>
 #include <stddef.h>
 
-typedef struct {
+typedef struct _sha512_ctx sha512_ctx_t;
+
+struct _sha512_ctx {
   uint8_t buf[128];
   uint64_t s[8];
   uint32_t len;
-} sha512_ctx_t;
+};
 
 void sha512_init(sha512_ctx_t *ctx);
 void sha512_update(sha512_ctx_t *ctx, const uint8_t *src, size_t n);
