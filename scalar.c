@@ -1,3 +1,4 @@
+#include "scalar.h"
 #include "types.h"
 #include "zint.h"
 
