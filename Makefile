@@ -28,8 +28,8 @@ test: $(TEST_BIN)
 	./$<
 
 genconst.o: genconst.c field.h types.h
-field.o: field.c field64.c field32.c field.h types.h
-scalar.o: scalar.c scalar64.c scalar32.c scalar.h types.h
+field.o: field.c field.h types.h
+scalar.o: scalar.c scalar.h types.h
 group.o: group.c types.h group.h constants.h field.h
 api.o: api.c api.h types.h group.h constants.h field.h sha512.h
 sha512.o: sha512.c sha512.h
