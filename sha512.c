@@ -6,7 +6,7 @@
 #define SHA512_BLOCK_SIZE 128
 #define SHA512_BLOCK_MASK (SHA512_BLOCK_SIZE - 1)
 
-static const uint64_t K[] = {
+static const uint64_t k_const[] = {
   UINT64_C(0x428a2f98d728ae22), UINT64_C(0x7137449123ef65cd),
   UINT64_C(0xb5c0fbcfec4d3b2f), UINT64_C(0xe9b5dba58189dbbc),
   UINT64_C(0x3956c25bf348b538), UINT64_C(0x59f111f1b605d019),
@@ -81,7 +81,7 @@ static inline void expand(uint64_t *w, int i) {
 
 #define idx(x, i) (x - i) & 7
 #define sha512_round(t, w, i) \
-  t[idx(7, i)] += hashsig1(t[idx(4, i)]) + ch(t[idx(4, i)], t[idx(5, i)], t[idx(6, i)]) + K[i] + w[i]; \
+  t[idx(7, i)] += hashsig1(t[idx(4, i)]) + ch(t[idx(4, i)], t[idx(5, i)], t[idx(6, i)]) + k_const[i] + w[i]; \
   t[idx(3, i)] += t[idx(7, i)]; \
   t[idx(7, i)] += hashsig0(t[idx(0, i)]) + maj(t[idx(0, i)], t[idx(1, i)], t[idx(2, i)])
 
