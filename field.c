@@ -34,7 +34,7 @@ static inline void reduce(fe_t *s, int64_t r[10]) {
 }
 
 void fe_frombytes(fe_t *e, const uint8_t s[32]) {
-  e->d[0] = loadle32(s) & k_l26;
+  e->d[0] = (loadle32(s) >> 0) & k_l26;
   e->d[1] = (loadle32(s + 3) >> 2) & k_l25;
   e->d[2] = (loadle32(s + 6) >> 3) & k_l26;
   e->d[3] = (loadle32(s + 9) >> 5) & k_l25;
