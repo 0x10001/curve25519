@@ -1,5 +1,3 @@
-#include <memory.h>
-
 #include "md.h"
 
 void md_reset(md_ctx_t *ctx) {
@@ -31,5 +29,4 @@ void md_hash(uint8_t *digest, size_t *len, const md_t *md, const uint8_t *msg, s
   md_init(&ctx, md);
   md_update(&ctx, msg, msg_len);
   md_finalize(&ctx, digest, len);
-  memset(&ctx, 0, sizeof(ctx));
 }

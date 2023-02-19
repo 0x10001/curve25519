@@ -7,7 +7,7 @@
 #include "md.h"
 
 void sha512_init(void *ctx);
-void sha512_update(void *ctx, const uint8_t *src, size_t n);
+void sha512_update(void *ctx, const uint8_t *msg, size_t len);
 void sha512_finalize(void *ctx, uint8_t *dst);
 
 static const md_t md_sha512 = {

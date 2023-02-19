@@ -137,11 +137,11 @@ void ed25519_sign(uint8_t sig[64], const ed_privkey_t *priv, const uint8_t *msg,
   ge_scmul(&g, r);
   ge_tobytes(sig, (const ge_p2_t *)&g);
 
-  sha512_init(&ctx);
-  sha512_update(&ctx, sig, 32);
-  sha512_update(&ctx, priv->pub, 32);
-  sha512_update(&ctx, msg, len);
-  sha512_finalize(&ctx, h);
+  md_reset(&ctx);
+  md_update(&ctx, sig, 32);
+  md_update(&ctx, priv->pub, 32);
+  md_update(&ctx, msg, len);
+  md_finalize(&ctx, h, NULL);
 
   sc_reduce(h);
   sc_muladd(sig + 32, priv->hash, h, r);

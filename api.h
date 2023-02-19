@@ -4,17 +4,20 @@
 #include <stddef.h>
 #include "types.h"
 
-typedef struct {
+typedef struct _ed_pubkey ed_pubkey_t;
+typedef struct _ed_privkey ed_privkey_t;
+
+struct _ed_pubkey {
   ge_pz_t cache[8];
   uint8_t pub[32];
-} ed_pubkey_t;
+};
 
-typedef struct {
+struct _ed_privkey {
   ge_pz_t cache[8];
   uint8_t pub[32];
   uint8_t priv[32];
   uint8_t hash[64];
-} ed_privkey_t;
+};
 
 int32_t x25519_exchange(uint8_t s[32], const uint8_t k[32], const uint8_t p[32]);
 void x25519_public_from_private(uint8_t pub[32], const uint8_t priv[32]);

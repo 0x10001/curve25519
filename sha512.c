@@ -106,28 +106,28 @@ void sha512_init(void *vctx) {
   ctx->s[7] = UINT64_C(0x5be0cd19137e2179);
 }
 
-void sha512_chunk(uint64_t *s, const uint8_t *src, size_t n) {
+void sha512_chunk(uint64_t *s, const uint8_t *msg, size_t n) {
   uint64_t w[80];
   uint64_t t[8];
   while (n) {
     memcpy(t, s, sizeof(t));
 
-    w[0] = loadbe64(src); src += 8;
-    w[1] = loadbe64(src); src += 8;
-    w[2] = loadbe64(src); src += 8;
-    w[3] = loadbe64(src); src += 8;
-    w[4] = loadbe64(src); src += 8;
-    w[5] = loadbe64(src); src += 8;
-    w[6] = loadbe64(src); src += 8;
-    w[7] = loadbe64(src); src += 8;
-    w[8] = loadbe64(src); src += 8;
-    w[9] = loadbe64(src); src += 8;
-    w[10] = loadbe64(src); src += 8;
-    w[11] = loadbe64(src); src += 8;
-    w[12] = loadbe64(src); src += 8;
-    w[13] = loadbe64(src); src += 8;
-    w[14] = loadbe64(src); src += 8;
-    w[15] = loadbe64(src); src += 8;
+    w[0] = loadbe64(msg); msg += 8;
+    w[1] = loadbe64(msg); msg += 8;
+    w[2] = loadbe64(msg); msg += 8;
+    w[3] = loadbe64(msg); msg += 8;
+    w[4] = loadbe64(msg); msg += 8;
+    w[5] = loadbe64(msg); msg += 8;
+    w[6] = loadbe64(msg); msg += 8;
+    w[7] = loadbe64(msg); msg += 8;
+    w[8] = loadbe64(msg); msg += 8;
+    w[9] = loadbe64(msg); msg += 8;
+    w[10] = loadbe64(msg); msg += 8;
+    w[11] = loadbe64(msg); msg += 8;
+    w[12] = loadbe64(msg); msg += 8;
+    w[13] = loadbe64(msg); msg += 8;
+    w[14] = loadbe64(msg); msg += 8;
+    w[15] = loadbe64(msg); msg += 8;
 
     expand(w, 16);
     expand(w, 17);
@@ -288,27 +288,27 @@ void sha512_chunk(uint64_t *s, const uint8_t *src, size_t n) {
   }
 }
 
-void sha512_update(void *vctx, const uint8_t *src, size_t n) {
+void sha512_update(void *vctx, const uint8_t *msg, size_t n) {
   sha512_ctx_t *ctx = vctx;
   uint8_t offset = ctx->len & SHA512_BLOCK_MASK;
   ctx->len += n;
   if (offset) {
     uint8_t free = SHA512_BLOCK_SIZE - offset;
     if (free <= n) {
-      memcpy(ctx->buf + offset, src, free);
+      memcpy(ctx->buf + offset, msg, free);
       sha512_chunk(ctx->s, ctx->buf, SHA512_BLOCK_SIZE);
       n -= free;
-      src += free;
+      msg += free;
       offset = 0;
     }
   }
 
   uint64_t len = n & ~SHA512_BLOCK_MASK;
   if (len) {
-    sha512_chunk(ctx->s, src, len);
-    src += len;
+    sha512_chunk(ctx->s, msg, len);
+    msg += len;
   }
-  memcpy(ctx->buf + offset, src, n & SHA512_BLOCK_MASK);
+  memcpy(ctx->buf + offset, msg, n & SHA512_BLOCK_MASK);
 }
 
 void sha512_finalize(void *vctx, uint8_t *dst) {
