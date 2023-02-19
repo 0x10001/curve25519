@@ -4,16 +4,17 @@
 #include <stdint.h>
 #include <stddef.h>
 
-typedef struct _sha512_ctx sha512_ctx_t;
+#include "md.h"
 
-struct _sha512_ctx {
-  uint8_t buf[128];
-  uint64_t s[8];
-  uint32_t len;
+void sha512_init(void *ctx);
+void sha512_update(void *ctx, const uint8_t *src, size_t n);
+void sha512_finalize(void *ctx, uint8_t *dst);
+
+static const md_t md_sha512 = {
+  64,
+  sha512_init,
+  sha512_update,
+  sha512_finalize,
 };
-
-void sha512_init(sha512_ctx_t *ctx);
-void sha512_update(sha512_ctx_t *ctx, const uint8_t *src, size_t n);
-void sha512_finalize(sha512_ctx_t *ctx, uint8_t *dst);
 
 #endif  /* SHA512_H */

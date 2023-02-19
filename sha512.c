@@ -6,6 +6,14 @@
 #define SHA512_BLOCK_SIZE 128
 #define SHA512_BLOCK_MASK (SHA512_BLOCK_SIZE - 1)
 
+typedef struct _sha512_ctx sha512_ctx_t;
+
+struct _sha512_ctx {
+  uint8_t buf[128];
+  uint64_t s[8];
+  uint32_t len;
+};
+
 static const uint64_t k_const[] = {
   UINT64_C(0x428a2f98d728ae22), UINT64_C(0x7137449123ef65cd),
   UINT64_C(0xb5c0fbcfec4d3b2f), UINT64_C(0xe9b5dba58189dbbc),
@@ -85,7 +93,8 @@ static inline void expand(uint64_t *w, int i) {
   t[idx(3, i)] += t[idx(7, i)]; \
   t[idx(7, i)] += hashsig0(t[idx(0, i)]) + maj(t[idx(0, i)], t[idx(1, i)], t[idx(2, i)])
 
-void sha512_init(sha512_ctx_t *ctx) {
+void sha512_init(void *vctx) {
+  sha512_ctx_t *ctx = vctx;
   ctx->len = 0;
   ctx->s[0] = UINT64_C(0x6a09e667f3bcc908);
   ctx->s[1] = UINT64_C(0xbb67ae8584caa73b);
@@ -279,7 +288,8 @@ void sha512_chunk(uint64_t *s, const uint8_t *src, size_t n) {
   }
 }
 
-void sha512_update(sha512_ctx_t *ctx, const uint8_t *src, size_t n) {
+void sha512_update(void *vctx, const uint8_t *src, size_t n) {
+  sha512_ctx_t *ctx = vctx;
   uint8_t offset = ctx->len & SHA512_BLOCK_MASK;
   ctx->len += n;
   if (offset) {
@@ -301,7 +311,8 @@ void sha512_update(sha512_ctx_t *ctx, const uint8_t *src, size_t n) {
   memcpy(ctx->buf + offset, src, n & SHA512_BLOCK_MASK);
 }
 
-void sha512_finalize(sha512_ctx_t *ctx, uint8_t *dst) {
+void sha512_finalize(void *vctx, uint8_t *dst) {
+  sha512_ctx_t *ctx = vctx;
   uint8_t *p = ctx->buf + (ctx->len & SHA512_BLOCK_MASK);
   uint8_t *end = ctx->buf + SHA512_BLOCK_SIZE;
   uint8_t *q = end - (sizeof(uint64_t) << 1);
